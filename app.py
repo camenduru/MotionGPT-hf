@@ -407,7 +407,7 @@ t2t_examples = [
 
 Init_chatbot = [
     (None,
-     "**👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion.**"
+     "** 👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion.**"
      )
 ] + t2m_examples[:3] + m2t_examples[:2] + t2t_examples[:2] + chat_instruct[-4:]
 
@@ -434,8 +434,9 @@ with gr.Blocks(css=customCSS) as demo:
                          elem_id="mGPT",
                          height=600,
                          label="MotionGPT",
-                         avatar_images=(None,
-                                        ("assets/images/avatar_bot.jpg")),
+                         avatar_images=(
+                            ("assets/images/avatar_user.jpg"),
+                            ("assets/images/avatar_bot.jpg")),
                          bubble_full_width=False)
 
     with gr.Row():
@@ -503,6 +504,12 @@ with gr.Blocks(css=customCSS) as demo:
                             [chatbot, motion_uploaded, data_stored, method],
                             [chatbot, motion_uploaded, data_stored],
                             queue=False)
+    
+    instruct_msg = instruct.click(bot_example, [chatbot, chat_instruct])
+    t2m_eg_msg = t2m_eg.click(bot_example, [chatbot, t2m_examples])
+    m2t_eg_msg = m2t_eg.click(bot_example, [chatbot, m2t_examples])
+    t2t_eg_msg = t2t_eg.click(bot_example, [chatbot, t2t_examples])
+    
     chatbot.change(scroll_to_output=True)
 
 demo.queue()
