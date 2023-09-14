@@ -580,7 +580,5 @@ with gr.Blocks(css=customCSS) as demo:
 
     chatbot.change(scroll_to_output=True)
 
-demo.queue()
-
 if __name__ == "__main__":
     demo.launch(debug=True)
