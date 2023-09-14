@@ -18,7 +18,9 @@ numpy==1.23.1
 
 # for visualization
 gradio==3.43.2
-pyrender
+PyOpenGL
+PyOpenGL_accelerate
+pyglet
 smplx==0.1.28
 trimesh==3.9.24
 joblib==1.2.0
