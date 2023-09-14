@@ -18,8 +18,8 @@ numpy==1.23.1
 
 # for visualization
 gradio==3.43.2
-# pyglet==1.4.0a1
-pyrender==0.1.45
+pyglet
+pyrender
 git+https://github.com/mmatl/pyopengl.git
 git+https://github.com/mmatl/pyglet.git
 PyOpenGL_accelerate
