@@ -20,7 +20,8 @@ numpy==1.23.1
 gradio==3.43.2
 # pyglet==1.4.0a1
 pyrender==0.1.45
-pyopengl
+git+https://github.com/mmatl/pyopengl.git
+git+https://github.com/mmatl/pyglet.git
 PyOpenGL_accelerate
 smplx==0.1.28
 trimesh==3.9.24
