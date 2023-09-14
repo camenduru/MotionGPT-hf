@@ -52,7 +52,6 @@ forced_decoder_ids_zh = audio_processor.get_decoder_prompt_ids(
 forced_decoder_ids_en = audio_processor.get_decoder_prompt_ids(
     language="en", task="translate")
 
-
 # HTML Style
 Video_Components = """
 <div class="side-video" style="position: relative;">
