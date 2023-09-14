@@ -18,10 +18,7 @@ numpy==1.23.1
 
 # for visualization
 gradio==3.43.2
-git+https://github.com/mmatl/pyrender.git
-git+https://github.com/mmatl/pyopengl.git
-git+https://github.com/mmatl/pyglet.git
-PyOpenGL_accelerate
+pyrender
 smplx==0.1.28
 trimesh==3.9.24
 joblib==1.2.0
