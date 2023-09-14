@@ -1,3 +1,8 @@
+
+os.environ["PYOPENGL_PLATFORM"] = "egl"
+os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
+os.system('pip install /home/user/app/pyrender')
+
 import gradio as gr
 import random
 import torch
@@ -21,9 +26,6 @@ from transformers import WhisperProcessor, WhisperForConditionalGeneration
 import librosa
 from huggingface_hub import snapshot_download
 
-os.environ["PYOPENGL_PLATFORM"] = "egl"
-os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
-os.system('pip install /home/user/app/pyrender')
 
 # Load model
 cfg = parse_args(phase="webui")  # parse config file
