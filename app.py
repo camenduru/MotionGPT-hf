@@ -52,8 +52,8 @@ forced_decoder_ids_zh = audio_processor.get_decoder_prompt_ids(
 forced_decoder_ids_en = audio_processor.get_decoder_prompt_ids(
     language="en", task="translate")
 
-# HTML Style
 
+# HTML Style
 Video_Components = """
 <div class="side-video" style="position: relative;">
     <video width="340" autoplay loop>
@@ -320,101 +320,171 @@ def bot(history, motion_uploaded, data_stored, method):
 
 
 def bot_example(history, responses):
-    for response in responses:
-        history[-1][1] = ""
-        for character in response:
-            history[-1][1] += character
-            time.sleep(0.02)
-            yield history, motion_uploaded, data_stored
+    history = history + responses
+    return history
 
-
-# Examples
-chat_instruct = [
-    (None,
-     "**👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion.**"
-     ),
-    (None,
-     "You can chat with me in pure text like generating human motion following your descriptions."
-     ),
-    (None,
-     "After generation, you can click the button in the top right of generation human motion result to download the human motion video or feature stored in .npy format."
-     ),
-    (None,
-     "With the human motion feature file downloaded or got from dataset, you are able to ask me to translate it!"
-     ),
-    (None,
-     "Of courser, you can also purely chat with me and let me give you human motion in text, here are some examples!"
-     ),
-    (None,
-     "We provide two motion visulization methods. The default fast method is skeleton line ploting which is like the examples below:"
-     ),
-    (None,
-     Video_Components_example.format(video_path="assets/videos/t2m_0.mp4",
-                                     video_fname="example1.mp4")),
-    (None,
-     "And the slow method is SMPL model rendering which is more realistic but slower."
-     ),
-    (None,
-     Video_Components_example.format(video_path="assets/videos/t2m_0.mp4",
-                                     video_fname="example1.mp4")),
-    (None, "👉 Follow the examples and try yourself!"),
-]
-
-t2m_examples = [
-    (None,
-     "You can chat with me in pure text, following are some examples of text-to-motion generation!"
-     ),
-    ("Generate a person is walking forwards, but stumbles and steps back, then carries on forward.",
-     Video_Components_example.format(video_path="assets/videos/t2m_0.mp4",
-                                     video_fname="example1.mp4")),
-    ("Generate a person is walking forwards, but stumbles and steps back, then carries on forward.",
-     Video_Components_example.format(video_path="assets/videos/t2m_0.mp4",
-                                     video_fname="example1.mp4")),
-    ("Generate a person is walking forwards, but stumbles and steps back, then carries on forward.",
-     Video_Components_example.format(video_path="assets/videos/t2m_0.mp4",
-                                     video_fname="example1.mp4")),
-]
-
-m2t_examples = [
-    (None,
-     "With the human motion feature file downloaded or got from dataset, you are able to ask me to translate it, here are some examples!"
-     ),
-    ("Please explain the movement shown in [Motion_tokens] using natural language.",
-     None),
-    (Video_Components_example.format(video_path="assets/videos/m2t_0.mp4",
-                                     video_fname="example2.mp4"),
-     "a person walks forward then does a backwards z-shape movement to its left side. then back to the right."
-     ),
-    ("Please explain the movement shown in [Motion_tokens] using natural language.",
-     None),
-    (Video_Components_example.format(video_path="assets/videos/m2t_0.mp4",
-                                     video_fname="example2.mp4"),
-     "a person walks forward then does a backwards z-shape movement to its left side. then back to the right."
-     ),
-]
-
-t2t_examples = [
-    (None,
-     "Of courser, you can also purely chat with me and let me give you human motion in text, here are some examples!"
-     ),
-    ('Depict a motion as like you have seen it.',
-     "The person walks while swaying their hips along a curved path to the left slowly then stops to look down at the edge of the grey platform at something."
-     ),
-    ('Depict a motion as like you have seen it.',
-     "The person walks while swaying their hips along a curved path to the left slowly then stops to look down at the edge of the grey platform at something."
-     ),
-]
-
-Init_chatbot = [
-    (None,
-     "**👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion.**"
-     )
-] + t2m_examples[:3] + m2t_examples[:2] + t2t_examples[:2] + chat_instruct[-4:]
 
 with open("assets/css/custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
 
 with gr.Blocks(css=customCSS) as demo:
+
+    # Examples
+    chat_instruct = gr.State([
+        (None,
+         "👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion."
+         ),
+        (None,
+         "💡 You can chat with me in pure text like generating human motion following your descriptions."
+         ),
+        (None,
+         "💡 After generation, you can click the button in the top right of generation human motion result to download the human motion video or feature stored in .npy format."
+         ),
+        (None,
+         "💡 With the human motion feature file downloaded or got from dataset, you are able to ask me to translate it!"
+         ),
+        (None,
+         "💡 Of courser, you can also purely chat with me and let me give you human motion in text, here are some examples!"
+         ),
+        (None,
+         "💡 We provide two motion visulization methods. The default fast method is skeleton line ploting which is like the examples below:"
+         ),
+        (None,
+         Video_Components_example.format(
+             video_path="assets/videos/example0_fast.mp4",
+             video_fname="example0_fast.mp4")),
+        (None,
+         "💡 And the slow method is SMPL model rendering which is more realistic but slower."
+         ),
+        (None,
+         Video_Components_example.format(
+             video_path="assets/videos/example0.mp4",
+             video_fname="example0.mp4")),
+        (None,
+         "💡 If you want to get the video in our paper and website like below, you can refer to the scirpt in our [github repo](https://github.com/OpenMotionLab/MotionGPT#-visualization)."
+         ),
+        (None,
+         Video_Components_example.format(
+             video_path="assets/videos/example0_blender.mp4",
+             video_fname="example0_blender.mp4")),
+        (None, "👉 Follow the examples and try yourself!"),
+    ])
+
+    t2m_examples = gr.State([
+        (None,
+         "💡 You can chat with me in pure text, following are some examples of text-to-motion generation!"
+         ),
+        ("A person is walking forwards, but stumbles and steps back, then carries on forward.",
+         Video_Components_example.format(
+             video_path="assets/videos/example0.mp4",
+             video_fname="example0.mp4")),
+        ("Generate a man aggressively kicks an object to the left using his right foot.",
+         Video_Components_example.format(
+             video_path="assets/videos/example1.mp4",
+             video_fname="example1.mp4")),
+        ("Generate a person lowers their arms, gets onto all fours, and crawls.",
+         Video_Components_example.format(
+             video_path="assets/videos/example2.mp4",
+             video_fname="example2.mp4")),
+        ("Show me the video of a person bends over and picks things up with both hands individually, then walks forward.",
+         Video_Components_example.format(
+             video_path="assets/videos/example3.mp4",
+             video_fname="example3.mp4")),
+        ("Image a person is practing balancing on one leg.",
+         Video_Components_example.format(
+             video_path="assets/videos/example5.mp4",
+             video_fname="example5.mp4")),
+        ("Show me a person walks forward, stops, turns directly to their right, then walks forward again.",
+         Video_Components_example.format(
+             video_path="assets/videos/example6.mp4",
+             video_fname="example6.mp4")),
+        ("I saw a person sits on the ledge of something then gets off and walks away.",
+         Video_Components_example.format(
+             video_path="assets/videos/example7.mp4",
+             video_fname="example7.mp4")),
+        ("Show me a person is crouched down and walking around sneakily.",
+         Video_Components_example.format(
+             video_path="assets/videos/example8.mp4",
+             video_fname="example8.mp4")),
+    ])
+
+    m2t_examples = gr.State([
+        (None,
+         "💡 With the human motion feature file downloaded or got from dataset, you are able to ask me to translate it, here are some examples!"
+         ),
+        ("Please explain the movement shown in <Motion_Placeholder> using natural language.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example0.mp4",
+            video_fname="example0.mp4"),
+         "The person was pushed but didn't fall down"),
+        ("What kind of action is being represented in <Motion_Placeholder>? Explain it in text.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example4.mp4",
+            video_fname="example4.mp4"),
+         "The figure has its hands curled at jaw level, steps onto its left foot and raises right leg with bent knee to kick forward and return to starting stance."
+         ),
+        ("Provide a summary of the motion demonstrated in <Motion_Placeholder> using words.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example2.mp4",
+            video_fname="example2.mp4"),
+         "A person who is standing with his arms up and away from his sides bends over, gets down on his hands and then his knees and crawls forward."
+         ),
+        ("Generate text for <Motion_Placeholder>:", None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example5.mp4",
+            video_fname="example5.mp4"),
+         "The man tries to stand in a yoga tree pose and looses his balance."),
+        ("Provide a summary of the motion depicted in <Motion_Placeholder> using language.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example6.mp4",
+            video_fname="example6.mp4"),
+         "Person walks up some steps then leeps to the other side and goes up a few more steps and jumps dow"
+         ),
+        ("Describe the motion represented by <Motion_Placeholder> in plain English.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example7.mp4",
+            video_fname="example7.mp4"),
+         "Person sits down, then stands up and walks forward. then the turns around 180 degrees and walks the opposite direction"
+         ),
+        ("Provide a description of the action in <Motion_Placeholder> using words.",
+         None),
+        (Video_Components_example.format(
+            video_path="assets/videos/example8.mp4",
+            video_fname="example8.mp4"),
+         "This man is bent forward and walks slowly around."),
+    ])
+
+    t2t_examples = gr.State([
+        (None,
+         "💡 Of courser, you can also purely chat with me and let me give you human motion in text, here are some examples!"
+         ),
+        ('Depict a motion as like you have seen it.',
+         "A person slowly walked forward in rigth direction while making the circle"
+         ),
+        ('Random say something about describing a human motion.',
+         "A man throws punches using his right hand."),
+        ('Describe the motion of someone as you will.',
+         "Person is moving left to right in a dancing stance swaying hips, moving feet left to right with arms held out"
+         ),
+        ('Come up with a human motion caption.',
+         "A person is walking in a counter counterclockwise motion."),
+        ('Write a sentence about how someone might dance.',
+         "A person with his hands down by his sides reaches down for something with his right hand, uses the object to make a stirring motion, then places the item back down."
+         ),
+        ('Depict a motion as like you have seen it.',
+         "A person is walking forward a few feet, then turns around, walks back, and continues walking."
+         )
+    ])
+
+    Init_chatbot = chat_instruct.value[:
+                                       1] + t2m_examples.value[:
+                                                               3] + m2t_examples.value[:2] + t2t_examples.value[:2] + chat_instruct.value[
+                                                                   -4:]
 
     # Variables
     motion_uploaded = gr.State({
@@ -434,7 +504,7 @@ with gr.Blocks(css=customCSS) as demo:
                          elem_id="mGPT",
                          height=600,
                          label="MotionGPT",
-                         avatar_images=(None,
+                         avatar_images=(("assets/images/avatar_user.png"),
                                         ("assets/images/avatar_bot.jpg")),
                          bubble_full_width=False)
 
@@ -444,6 +514,7 @@ with gr.Blocks(css=customCSS) as demo:
                 txt = gr.Textbox(
                     label="Text",
                     show_label=False,
+                    elem_id="textbox",
                     placeholder=
                     "Enter text and press ENTER or speak to input. You can also upload motion.",
                     container=False)
@@ -454,8 +525,7 @@ with gr.Blocks(css=customCSS) as demo:
                                type='filepath')
                 btn = gr.UploadButton("📁 Upload motion",
                                       elem_id="upload",
-                                      file_types=["file"],
-                                      variant='primary')
+                                      file_types=["file"])
                 regen = gr.Button("🔄 Regenerate", elem_id="regen")
                 clear = gr.ClearButton([txt, chatbot, aud], value='🗑️ Clear')
 
@@ -465,7 +535,7 @@ with gr.Blocks(css=customCSS) as demo:
                 ''')
 
             with gr.Row():
-                instruct = gr.Button("Instructions", elem_id="instruction")
+                instruct_eg = gr.Button("Instructions", elem_id="instruct")
                 t2m_eg = gr.Button("Text-to-Motion", elem_id="t2m")
                 m2t_eg = gr.Button("Motion-to-Text", elem_id="m2t")
                 t2t_eg = gr.Button("Random description", elem_id="t2t")
@@ -503,6 +573,17 @@ with gr.Blocks(css=customCSS) as demo:
                             [chatbot, motion_uploaded, data_stored, method],
                             [chatbot, motion_uploaded, data_stored],
                             queue=False)
+
+    instruct_msg = instruct_eg.click(bot_example, [chatbot, chat_instruct],
+                                     [chatbot],
+                                     queue=False)
+    t2m_eg_msg = t2m_eg.click(bot_example, [chatbot, t2m_examples], [chatbot],
+                              queue=False)
+    m2t_eg_msg = m2t_eg.click(bot_example, [chatbot, m2t_examples], [chatbot],
+                              queue=False)
+    t2t_eg_msg = t2t_eg.click(bot_example, [chatbot, t2t_examples], [chatbot],
+                              queue=False)
+
     chatbot.change(scroll_to_output=True)
 
 demo.queue()
