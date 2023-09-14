@@ -6,6 +6,7 @@ import cv2
 import os
 import numpy as np
 import OpenGL.GL as gl
+import imageio
 import pytorch_lightning as pl
 import moviepy.editor as mp
 from pathlib import Path
@@ -118,33 +119,26 @@ def render_motion(data, feats, method='fast'):
         shape = [768, 768]
         render = SMPLRender(cfg.RENDER.SMPL_MODEL_PATH)
 
-        if not os.environ.get("PYOPENGL_PLATFORM"):
-            os.environ["DISPLAY"] = ":0.0"
-            os.environ["PYOPENGL_PLATFORM"] = "egl"
-
-        size = (shape[1], shape[0])
-        fps = 20.0
-        fourcc = cv2.VideoWriter_fourcc('M', 'P', '4', 'V')
-        videoWriter = cv2.VideoWriter(output_mp4_path, fourcc, fps, size)
         r = RRR.from_rotvec(np.array([np.pi, 0.0, 0.0]))
         pose[:, 0] = np.matmul(r.as_matrix().reshape(1, 3, 3), pose[:, 0])
+        vid = []
+        aroot = data[[0], 0]
+        aroot[:, 1] = -aroot[:, 1]
+        params = dict(pred_shape=np.zeros([1, 10]),
+                        pred_root=aroot,
+                        pred_pose=pose)
+        render.init_renderer([shape[0], shape[1], 3], params)
         for i in range(data.shape[0]):
-            img = np.zeros([shape[0], shape[1], 3])
-            aroot = data[[i], 0] + np.array([[0.0, 0.0, 30.0]])
-            aroot[:, 1] = -aroot[:, 1]
-            params = dict(pred_shape=np.zeros([1, 10]),
-                          pred_root=aroot,
-                          pred_pose=pose[[i]])
-            renderImg = render.render(img.copy(), params)
-            renderImg = (renderImg * 255).astype(np.uint8)
-            videoWriter.write(renderImg)
-        videoWriter.release()
-        output_video_h264_name = output_mp4_path[:-4] + '_h264.mp4'
-        command = 'ffmpeg -y -i {} -vcodec h264 {}'.format(
-            output_mp4_path, output_video_h264_name)
-        os.system(command)
-        output_mp4_path = output_video_h264_name
-        video_fname = video_fname[:-4] + '_h264.mp4'
+            renderImg = render.render(i)
+            vid.append(renderImg)
+            
+        out = np.stack(vid, axis=0)
+        output_gif_path = output_mp4_path[:-4] + '.gif'
+        imageio.mimwrite(output_gif_path, out, duration=50)
+        out_video = mp.VideoFileClip(output_gif_path)
+        out_video.write_videofile(output_mp4_path)
+        del out, render
+        
     elif method == 'fast':
         output_gif_path = output_mp4_path[:-4] + '.gif'
         if len(data.shape) == 3:
@@ -154,6 +148,7 @@ def render_motion(data, feats, method='fast'):
         pose_vis = plot_3d.draw_to_batch(data, [''], [output_gif_path])
         out_video = mp.VideoFileClip(output_gif_path)
         out_video.write_videofile(output_mp4_path)
+        del pose_vis
 
     return output_mp4_path, video_fname, output_npy_path, feats_fname
 
@@ -544,7 +539,7 @@ with gr.Blocks(css=customCSS) as demo:
                                  label="Visulization method",
                                  interactive=True,
                                  elem_id="method",
-                                 value="fast")
+                                 value="slow")
 
             language = gr.Dropdown(["English", "中文"],
                                    label="Speech language",
