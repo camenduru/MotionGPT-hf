@@ -1,4 +1,4 @@
-
+import os
 os.environ["PYOPENGL_PLATFORM"] = "egl"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
 os.system('pip install /home/user/app/pyrender')
@@ -8,7 +8,6 @@ import random
 import torch
 import time
 import cv2
-import os
 import numpy as np
 import OpenGL.GL as gl
 import imageio
