@@ -23,7 +23,7 @@ from huggingface_hub import snapshot_download
 
 os.environ["PYOPENGL_PLATFORM"] = "egl"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
-os.system('pip install /home/user/app/pyrender')
+os.system('pip install pyrender')
 
 # Load model
 cfg = parse_args(phase="webui")  # parse config file
