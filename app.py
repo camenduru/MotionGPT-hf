@@ -483,7 +483,7 @@ with gr.Blocks(css=customCSS) as demo:
     Init_chatbot = chat_instruct.value[:
                                        1] + t2m_examples.value[:
                                                                3] + m2t_examples.value[:2] + t2t_examples.value[:2] + chat_instruct.value[
-                                                                   -4:]
+                                                                   -6:]
 
     # Variables
     motion_uploaded = gr.State({
