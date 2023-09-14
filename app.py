@@ -384,7 +384,7 @@ with gr.Blocks(css=customCSS) as demo:
          Video_Components_example.format(
              video_path="assets/videos/example3.mp4",
              video_fname="example3.mp4")),
-        ("Image a person is practing balancing on one leg.",
+        ("Imagine a person is practing balancing on one leg.",
          Video_Components_example.format(
              video_path="assets/videos/example5.mp4",
              video_fname="example5.mp4")),
@@ -455,7 +455,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     t2t_examples = gr.State([
         (None,
-         "💡 Of courser, you can also purely chat with me and let me give you human motion in text, here are some examples!"
+         "💡 Of course, you can also purely chat with me and let me give you human motion in text, here are some examples!"
          ),
         ('Depict a motion as like you have seen it.',
          "A person slowly walked forward in rigth direction while making the circle"
