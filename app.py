@@ -2,6 +2,7 @@ import os
 os.environ["PYOPENGL_PLATFORM"] = "egl"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
 os.system('pip install /home/user/app/pyrender')
+os.system('pip install eventlet')
 
 import gradio as gr
 import random
@@ -310,9 +311,11 @@ def bot(history, motion_uploaded, data_stored, method):
     history[-1][1] = ""
     for character in response:
         history[-1][1] += character
-        time.sleep(0.02)
+        with eventlet.Timeout(0.021,False):
+            time.sleep(0.02)
+            yield history, motion_uploaded, data_stored
+            continue
         yield history, motion_uploaded, data_stored
-
 
 def bot_example(history, responses):
     history = history + responses
