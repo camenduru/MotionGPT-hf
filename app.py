@@ -312,12 +312,9 @@ def bot(history, motion_uploaded, data_stored, method):
     history[-1][1] = ""
     for character in response:
         history[-1][1] += character
-        with eventlet.Timeout(0.021,False):
-            time.sleep(0.02)
-            yield history, motion_uploaded, data_stored
-            continue
+        time.sleep(0.02)
         yield history, motion_uploaded, data_stored
-
+     
 def bot_example(history, responses):
     history = history + responses
     return history
