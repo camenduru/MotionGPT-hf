@@ -25,6 +25,7 @@ from mGPT.render.pyrender.smpl_render import SMPLRender
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 import librosa
 from huggingface_hub import snapshot_download
+import eventlet
 
 
 # Load model
