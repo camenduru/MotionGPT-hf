@@ -15,6 +15,7 @@ bert-score
 nlg-metricverse
 gdown
 numpy==1.23.1
+eventlet
 
 # for visualization
 gradio==3.43.2
@@ -33,4 +34,3 @@ more-itertools
 natsort
 moviepy
 librosa
-eventlet
