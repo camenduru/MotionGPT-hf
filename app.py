@@ -565,10 +565,10 @@ with gr.Blocks(css=customCSS) as demo:
         [chatbot, data_stored],
         queue=False).then(bot, [chatbot, motion_uploaded, data_stored, method],
                           [chatbot, motion_uploaded, data_stored])
-    regen_msg = regen.click(bot,
-                            [chatbot, motion_uploaded, data_stored, method],
-                            [chatbot, motion_uploaded, data_stored],
-                            queue=False)
+    # regen_msg = regen.click(bot,
+    #                         [chatbot, motion_uploaded, data_stored, method],
+    #                         [chatbot, motion_uploaded, data_stored],
+    #                         queue=False)
 
     instruct_msg = instruct_eg.click(bot_example, [chatbot, chat_instruct],
                                      [chatbot],
