@@ -33,3 +33,4 @@ more-itertools
 natsort
 moviepy
 librosa
+eventlet
