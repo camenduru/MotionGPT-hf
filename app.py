@@ -522,7 +522,7 @@ with gr.Blocks(css=customCSS) as demo:
                 btn = gr.UploadButton("📁 Upload motion",
                                       elem_id="upload",
                                       file_types=["file"])
-                regen = gr.Button("🔄 Regenerate", elem_id="regen")
+                # regen = gr.Button("🔄 Regenerate", elem_id="regen")
                 clear = gr.ClearButton([txt, chatbot, aud], value='🗑️ Clear')
 
             with gr.Row():
