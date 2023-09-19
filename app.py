@@ -125,8 +125,8 @@ def render_motion(data, feats, method='fast'):
         r = RRR.from_rotvec(np.array([np.pi, 0.0, 0.0]))
         pose[:, 0] = np.matmul(r.as_matrix().reshape(1, 3, 3), pose[:, 0])
         vid = []
-        aroot = data[[0], 0]
-        aroot[:, 1] = -aroot[:, 1]
+        aroot = data[:, 0]
+        aroot[:, 1:] = -aroot[:, 1:]
         params = dict(pred_shape=np.zeros([1, 10]),
                       pred_root=aroot,
                       pred_pose=pose)
