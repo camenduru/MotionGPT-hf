@@ -1,9 +1,9 @@
 import os
+
 os.environ["PYOPENGL_PLATFORM"] = "egl"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
 os.system('pip install /home/user/app/pyrender')
 os.system('pip install eventlet')
-
 
 import gradio as gr
 import random
@@ -27,7 +27,6 @@ from transformers import WhisperProcessor, WhisperForConditionalGeneration
 import librosa
 from huggingface_hub import snapshot_download
 import eventlet
-
 
 # Load model
 cfg = parse_args(phase="webui")  # parse config file
@@ -129,20 +128,20 @@ def render_motion(data, feats, method='fast'):
         aroot = data[[0], 0]
         aroot[:, 1] = -aroot[:, 1]
         params = dict(pred_shape=np.zeros([1, 10]),
-                        pred_root=aroot,
-                        pred_pose=pose)
+                      pred_root=aroot,
+                      pred_pose=pose)
         render.init_renderer([shape[0], shape[1], 3], params)
         for i in range(data.shape[0]):
             renderImg = render.render(i)
             vid.append(renderImg)
-            
+
         out = np.stack(vid, axis=0)
         output_gif_path = output_mp4_path[:-4] + '.gif'
         imageio.mimwrite(output_gif_path, out, duration=50)
         out_video = mp.VideoFileClip(output_gif_path)
         out_video.write_videofile(output_mp4_path)
         del out, render
-        
+
     elif method == 'fast':
         output_gif_path = output_mp4_path[:-4] + '.gif'
         if len(data.shape) == 3:
@@ -315,7 +314,8 @@ def bot(history, motion_uploaded, data_stored, method):
         history[-1][1] += character
         time.sleep(0.02)
         yield history, motion_uploaded, data_stored
-     
+
+
 def bot_example(history, responses):
     history = history + responses
     return history
@@ -366,6 +366,14 @@ with gr.Blocks(css=customCSS) as demo:
              video_fname="example0_blender.mp4")),
         (None, "👉 Follow the examples and try yourself!"),
     ])
+    chat_instruct_sum = gr.State([(None, '''
+         👋 Hi, I'm MotionGPT! I can generate realistic human motion from text, or generate text from motion.
+         
+         1. You can chat with me in pure text like generating human motion following your descriptions.
+         2. After generation, you can click the button in the top right of generation human motion result to download the human motion video or feature stored in .npy format.
+         3. With the human motion feature file downloaded or got from dataset, you are able to ask me to translate it!
+         4. Of course, you can also purely chat with me and let me give you human motion in text, here are some examples!
+         ''')] + chat_instruct.value[-7:])
 
     t2m_examples = gr.State([
         (None,
@@ -501,7 +509,7 @@ with gr.Blocks(css=customCSS) as demo:
                          elem_id="mGPT",
                          height=600,
                          label="MotionGPT",
-                         avatar_images=(("assets/images/avatar_user.png"),
+                         avatar_images=(None,
                                         ("assets/images/avatar_bot.jpg")),
                          bubble_full_width=False)
 
@@ -571,7 +579,7 @@ with gr.Blocks(css=customCSS) as demo:
     #                         [chatbot, motion_uploaded, data_stored],
     #                         queue=False)
 
-    instruct_msg = instruct_eg.click(bot_example, [chatbot, chat_instruct],
+    instruct_msg = instruct_eg.click(bot_example, [chatbot, chat_instruct_sum],
                                      [chatbot],
                                      queue=False)
     t2m_eg_msg = t2m_eg.click(bot_example, [chatbot, t2m_examples], [chatbot],
