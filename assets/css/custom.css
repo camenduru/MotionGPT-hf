@@ -41,6 +41,7 @@
 
 [class*='message'] {
   border: none;
+  border-radius: var(--radius-xl) !important;
   /* font-size: var(--text-xl) !important;
   line-height: var(--line-xl) !important; */
 }
