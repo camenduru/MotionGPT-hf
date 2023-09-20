@@ -504,7 +504,8 @@ with gr.Blocks(css=customCSS) as demo:
     data_stored = gr.State([])
 
     gr.Markdown('''
-                <h2> <a href="https://motion-gpt.github.io/">MotionGPT: Human Motion as a Foreign Language</a></h2>
+                # MotionGPT: Human Motion as a Foreign Language
+                
                 <p align="left">
                 <a href="https://github.com/OpenMotionLab/MotionGPT">Github Repo</a> •
                 <a href="https://motion-gpt.github.io/">Project Page</a> •
