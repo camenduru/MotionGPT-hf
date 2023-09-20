@@ -503,7 +503,15 @@ with gr.Blocks(css=customCSS) as demo:
     })
     data_stored = gr.State([])
 
-    gr.Markdown("# MotionGPT")
+    gr.Markdown('''
+                <h2> <a href="https://motion-gpt.github.io/">MotionGPT: Human Motion as a Foreign Language</a></h2>
+                <p align="left">
+                <a href="https://github.com/OpenMotionLab/MotionGPT">Github Repo</a> •
+                <a href="https://motion-gpt.github.io/">Project Page</a> •
+                <a href="https://arxiv.org/abs/2306.14795">Arxiv Paper</a> •
+                <a href="https://github.com/OpenMotionLab/MotionGPT#-citation">Citation
+                </p>
+                ''')
 
     chatbot = gr.Chatbot(Init_chatbot,
                          elem_id="mGPT",
