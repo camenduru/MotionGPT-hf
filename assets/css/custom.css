@@ -49,12 +49,12 @@
 [data-testid='bot'] {
   max-width: 70%;
   width: auto !important;
-  /* border-bottom-left-radius: 0 !important; */
+  border-bottom-left-radius: 0 !important;
 }
 [data-testid='user'] {
   max-width: 70%;
   width: auto !important;
-  /* border-bottom-right-radius: 0 !important; */
+  border-bottom-right-radius: 0 !important;
 }
 
 /* Text & Video */
