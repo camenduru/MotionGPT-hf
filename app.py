@@ -2,7 +2,6 @@ import os
 os.environ['DISPLAY'] = ':0.0'
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
 os.system('pip install /home/user/app/pyrender')
-os.system('pip install eventlet')
 os.system('pip install triangle==20220202')
 
 import gradio as gr
