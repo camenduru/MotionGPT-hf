@@ -34,3 +34,4 @@ more-itertools
 natsort
 moviepy
 librosa
+torch==2.0.0
