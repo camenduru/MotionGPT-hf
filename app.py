@@ -3,6 +3,7 @@ os.environ['DISPLAY'] = ':0.0'
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
 os.system('pip install /home/user/app/pyrender')
+os.system('pip install PyOpenGL-accelerate')
 # os.system('pip install triangle==20220202')
 
 import gradio as gr
