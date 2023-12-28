@@ -7,27 +7,18 @@ os.system('pip install pyglet==1.4.0a1')
 os.system('pip install triangle==20220202')
 
 import gradio as gr
-import random
 import torch
 import time
-import cv2
 import numpy as np
-import OpenGL.GL as gl
-import imageio
 import pytorch_lightning as pl
-import moviepy.editor as mp
+import subprocess
 from pathlib import Path
 from mGPT.data.build_data import build_data
 from mGPT.models.build_model import build_model
 from mGPT.config import parse_args
-from scipy.spatial.transform import Rotation as RRR
-import mGPT.render.matplot.plot_3d_global as plot_3d
-from mGPT.render.pyrender.hybrik_loc2rot import HybrIKJointsToRotmat
-from mGPT.render.pyrender.smpl_render import SMPLRender
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 import librosa
 from huggingface_hub import snapshot_download
-import eventlet
 
 # Load model
 cfg = parse_args(phase="webui")  # parse config file
@@ -105,55 +96,17 @@ def render_motion(data, feats, method='fast'):
     fname = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(
         time.time())) + str(np.random.randint(10000, 99999))
     video_fname = fname + '.mp4'
-    feats_fname = fname + '.npy'
+    feats_fname = f"{fname}_feats" + '.npy'
+    data_fname = f"{fname}_joints" + '.npy'
     output_npy_path = os.path.join(output_dir, feats_fname)
+    output_joints_path = os.path.join(output_dir, data_fname)
     output_mp4_path = os.path.join(output_dir, video_fname)
     np.save(output_npy_path, feats)
-
-    if method == 'slow':
-        if len(data.shape) == 4:
-            data = data[0]
-        data = data - data[0, 0]
-        pose_generator = HybrIKJointsToRotmat()
-        pose = pose_generator(data)
-        pose = np.concatenate([
-            pose,
-            np.stack([np.stack([np.eye(3)] * pose.shape[0], 0)] * 2, 1)
-        ], 1)
-        shape = [768, 768]
-        render = SMPLRender(cfg.RENDER.SMPL_MODEL_PATH)
-
-        r = RRR.from_rotvec(np.array([np.pi, 0.0, 0.0]))
-        pose[:, 0] = np.matmul(r.as_matrix().reshape(1, 3, 3), pose[:, 0])
-        vid = []
-        aroot = data[:, 0]
-        aroot[:, 1:] = -aroot[:, 1:]
-        params = dict(pred_shape=np.zeros([1, 10]),
-                      pred_root=aroot,
-                      pred_pose=pose)
-        render.init_renderer([shape[0], shape[1], 3], params)
-        for i in range(data.shape[0]):
-            renderImg = render.render(i)
-            vid.append(renderImg)
-
-        out = np.stack(vid, axis=0)
-        output_gif_path = output_mp4_path[:-4] + '.gif'
-        imageio.mimwrite(output_gif_path, out, duration=50)
-        out_video = mp.VideoFileClip(output_gif_path)
-        out_video.write_videofile(output_mp4_path)
-        del out, render
-
-    elif method == 'fast':
-        output_gif_path = output_mp4_path[:-4] + '.gif'
-        if len(data.shape) == 3:
-            data = data[None]
-        if isinstance(data, torch.Tensor):
-            data = data.cpu().numpy()
-        pose_vis = plot_3d.draw_to_batch(data, [''], [output_gif_path])
-        out_video = mp.VideoFileClip(output_gif_path)
-        out_video.write_videofile(output_mp4_path)
-        del pose_vis
-
+    np.save(output_joints_path, data)
+    
+    cmd3 = ["xvfb-run", "python", "-m", "render", "--joints_path", output_joints_path, "--method", method, "--output_mp4_path", output_mp4_path, "--smpl_model_path", cfg.RENDER.SMPL_MODEL_PATH]
+    subprocess.run(cmd3)
+    
     return output_mp4_path, video_fname, output_npy_path, feats_fname
 
 
