@@ -20,7 +20,7 @@ eventlet
 # for visualization
 gradio==3.43.2
 PyOpenGL==3.1.6 
-PyOpenGL-accelerate~=3.1.5
+# PyOpenGL-accelerate~=3.1.5
 smplx==0.1.28
 trimesh==3.9.24
 joblib==1.2.0
