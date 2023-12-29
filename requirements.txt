@@ -19,7 +19,7 @@ eventlet
 
 # for visualization
 pyglet==1.4.0a1
-PyOpenGL==3.1.1a1
+pyopengl==3.1.4
 PyOpenGL_accelerate
 smplx==0.1.28
 trimesh==3.9.24
