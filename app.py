@@ -105,7 +105,7 @@ def render_motion(data, feats, method='fast'):
     np.save(output_joints_path, data)
     
     render_cmd = ["xvfb-run", "--server-args='-screen 0 1024x768x24'", "python", "-m", "render", "--joints_path", output_joints_path, "--method", method, "--output_mp4_path", output_mp4_path, "--smpl_model_path", cfg.RENDER.SMPL_MODEL_PATH]
-    os.system(render_cmd)
+    os.system(" ".join(render_cmd))
     # subprocess.run(cmd3)
     
     return output_mp4_path, video_fname, output_npy_path, feats_fname
