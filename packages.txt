@@ -7,4 +7,4 @@ libgl1-mesa-dri
 libegl1-mesa
 libgbm1
 libosmesa6
-python-opengl
+python3-opengl
