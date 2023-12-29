@@ -10,7 +10,7 @@ pinned: false
 license: mit
 ---
 
- MotionGPT: Human Motion as a Foreign Language - [[ArXiv](https://arxiv.org/abs/2306.14795)]
+MotionGPT: Human Motion as a Foreign Language - [[ArXiv](https://arxiv.org/abs/2306.14795)]
 
 ---
 

@@ -2,7 +2,7 @@
 import os
 os.environ['DISPLAY'] = ':0.0'
 os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
-os.environ["MESA_GL_VERSION_OVERRIDE"] = "4.1"
+os.environ["MUJOCO_GL"] = "osmesa"
 from argparse import ArgumentParser
 import numpy as np
 import OpenGL.GL as gl
