@@ -66,7 +66,6 @@ if __name__ == '__main__':
         imageio.mimwrite(output_gif_path, out, duration=50)
         out_video = mp.VideoFileClip(output_gif_path)
         out_video.write_videofile(output_mp4_path)
-        del out, render
 
     elif method == 'fast':
         output_gif_path = output_mp4_path[:-4] + '.gif'
@@ -77,4 +76,3 @@ if __name__ == '__main__':
         pose_vis = plot_3d.draw_to_batch(data, [''], [output_gif_path])
         out_video = mp.VideoFileClip(output_gif_path)
         out_video.write_videofile(output_mp4_path)
-        del pose_vis
