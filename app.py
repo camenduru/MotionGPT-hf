@@ -554,4 +554,9 @@ with gr.Blocks(css=customCSS) as demo:
     chatbot.change(scroll_to_output=True)
 
 if __name__ == "__main__":
-    demo.queue().launch(debug=True, share=True)
+    from pyngrok import ngrok, conf
+    NGROK_TOKEN = os.environ.get('NGROK_TOKEN')
+    conf.get_default().auth_token = NGROK_TOKEN
+    public_url = ngrok.connect(7861).public_url
+    print(public_url)
+    demo.queue().launch(server_port=7861, inline=False, share=False, debug=True)
