@@ -1,7 +1,7 @@
 import os
-os.system('pip install /home/user/app/pyrender')
-os.system('pip install pyglet==1.4.0a1')
-os.system('pip install triangle==20220202')
+# os.system('pip install /home/user/app/pyrender')
+# os.system('pip install pyglet==1.4.0a1')
+# os.system('pip install triangle==20220202')
 
 import gradio as gr
 import torch
@@ -554,4 +554,4 @@ with gr.Blocks(css=customCSS) as demo:
     chatbot.change(scroll_to_output=True)
 
 if __name__ == "__main__":
-    demo.launch(debug=True)
+    demo.launch(debug=True, share=True)
